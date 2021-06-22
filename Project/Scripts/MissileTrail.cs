@@ -21,7 +21,7 @@ public class MissileTrail : Godot.Line2D
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
-	   point = target.GlobalPosition;
+	   point = GlobalPosition;	// TODO
 	   AddPoint(point);	
 	}
 }
