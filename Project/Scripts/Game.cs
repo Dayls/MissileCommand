@@ -24,21 +24,24 @@ public class Game : Node2D
     	{
     		// instancing guns
 
-    		var gun = (Gun)gunScene.Instance();
+    		Gun gun = (Gun)gunScene.Instance();
     		AddChild(gun);
 
     		var ground = GetNode<Node2D>("Ground");
     		if(i == 1)
     		{
     			gun.Position = ground.GetNode<Position2D>("Gun 1").GlobalPosition;
+    			gun.Name = ("Gun 1");
     		}
     		if(i == 2)
     		{
     			gun.Position = ground.GetNode<Position2D>("Gun 2").GlobalPosition;
+    			gun.Name = ("Gun 2");
     		}
     		if(i == 3)
     		{
     			gun.Position = ground.GetNode<Position2D>("Gun 3").GlobalPosition;
+    			gun.Name = ("Gun 3");
     		}
     		Vector2 gunPos = gun.Position;
     		gunPos.y -= 30;
@@ -66,6 +69,29 @@ public class Game : Node2D
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
-	    //GetNode<
+	    getInput();
+	}
+
+	void getInput()
+	{
+		if(Input.IsActionJustPressed("mouseLeft"))
+		{
+			Vector2 mousePos = GetGlobalMousePosition();
+			if ( mousePos.x <= 341.3f )
+			{
+				Gun gun = (Gun)GetNode<Node2D>("Gun 1");
+				gun.ShootRocket (GetGlobalMousePosition ());
+			}
+			else if( mousePos.x > 341.3f && mousePos.x <= 682.6f )
+			{
+				Gun gun = (Gun)GetNode<Node2D>("Gun 2");
+				gun.ShootRocket(GetGlobalMousePosition ());
+			}
+			else if( mousePos.x > 682.6f && mousePos.x <= 1024 )
+			{
+				Gun gun = (Gun)GetNode<Node2D>("Gun 3");
+				gun.ShootRocket(GetGlobalMousePosition ());
+			}
+		}
 	}
 }

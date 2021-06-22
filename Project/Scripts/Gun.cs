@@ -3,21 +3,16 @@ using System;
 
 public class Gun : Node2D
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+	bool canFire = false;
+	public PackedScene missileScene = (PackedScene)ResourceLoader.Load("res://Scenes/Missile.tscn");
 
     double degree;
+    int rotationMax = 80;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        Timer timer = new Timer();
-		AddChild(timer);
-		timer.Connect("timeout", this, "OnTimerTimeout");
-		timer.OneShot = false;
-		timer.WaitTime = 1.5f;
-		timer.Start();
+        
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -25,40 +20,18 @@ public class Gun : Node2D
 	{
 		var gun = GetNode<Sprite>("Gun");
 
-		/*if(gun.RotationDegrees < -90)
-			gun.RotationDegrees = -90;
-		else if(gun.RotationDegrees > 90)
-			gun.RotationDegrees = 90;
-		else if(gun.RotationDegrees >= -90 && gun.RotationDegrees <= 90)
-		{
-			gun.LookAt(GetGlobalMousePosition());
-			gun.RotationDegrees += 90;
-		}*/
-
-		//gun.LookAt(GetGlobalMousePosition());
-		//gun.RotationDegrees += 90;
-
 		float checkRotation = CheckMouse(this.GetNode<Sprite>("Gun"), this.GetNode<Sprite>("Gun").Position);
 
-		if( checkRotation > -80 && checkRotation < 80 )
+		if( checkRotation > -rotationMax && checkRotation < rotationMax )
 		{
+			canFire = true;
 			gun.LookAt(GetGlobalMousePosition());
 			gun.RotationDegrees += 90;
 		}
-
-		/*if( CheckMouse(this.GetNode<Sprite>("Gun"), this.GetNode<Sprite>("Gun").Position ) < -90)
-		{
-			gun.RotationDegrees = -90;
-		}
-		else if(CheckMouse(this.GetNode<Sprite>("Gun"), this.GetNode<Sprite>("Gun").Position ) > 90)
-		{
-			gun.RotationDegrees = 90;
-		}
-		else //if(gun.RotationDegrees >= -90 && gun.RotationDegrees <= 90)
-		{
-			gun.LookAt(GetGlobalMousePosition());
-			gun.RotationDegrees += 90;
-		}*/
+		else if(checkRotation > -rotationMax - 5 && checkRotation < rotationMax + 5)
+			canFire = true;
+		else
+			canFire = false;
 	}
 
 	public float CheckMouse( Sprite gunSprite, Vector2 pos )
@@ -74,8 +47,13 @@ public class Gun : Node2D
 		
 	}
 
-	void OnTimerTimeout()
+	public void ShootRocket( Vector2 mousePos )
 	{
-		//GD.Print(degree);
+		if(canFire)
+		{
+			Missile missile = (Missile)missileScene.Instance();
+			AddChild(missile);
+			missile.moveToTarget(mousePos);
+		}
 	}
 }
