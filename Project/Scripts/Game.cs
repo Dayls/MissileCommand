@@ -22,6 +22,8 @@ public class Game : Node2D
     {
     	for(int i = 1; i < 4; i++)
     	{
+    		// instancing guns
+
     		var gun = (Gun)gunScene.Instance();
     		AddChild(gun);
 
@@ -29,19 +31,35 @@ public class Game : Node2D
     		if(i == 1)
     		{
     			gun.Position = ground.GetNode<Position2D>("Gun 1").GlobalPosition;
-    			gun.GetNode<Sprite>("Gun").Texture = (Texture)ResourceLoader.Load("res://Sprites/Guns/Gun 1.png");
     		}
     		if(i == 2)
     		{
     			gun.Position = ground.GetNode<Position2D>("Gun 2").GlobalPosition;
-    			gun.GetNode<Sprite>("Gun").Texture = (Texture)ResourceLoader.Load("res://Sprites/Guns/Gun 2.png");
     		}
     		if(i == 3)
     		{
     			gun.Position = ground.GetNode<Position2D>("Gun 3").GlobalPosition;
-    			gun.GetNode<Sprite>("Gun").Texture = (Texture)ResourceLoader.Load("res://Sprites/Guns/Gun 1.png");
-    			gun.GetNode<Sprite>("Gun").FlipH = true;
     		}
+    		Vector2 gunPos = gun.Position;
+    		gunPos.y -= 30;
+    		gun.Position = gunPos;
+
+    		gun.GetNode<Sprite>("Gun").Texture = (Texture)ResourceLoader.Load("res://Sprites/Launcher/Gun.png");
+
+    		// instancing rocket launcers
+    		Sprite launcher = new Sprite();
+    		AddChild(launcher);
+    		launcher.Texture = (Texture)ResourceLoader.Load("res://Sprites/Launcher/Launcher.png");
+    		launcher.Scale = new Vector2(0.1f, 0.1f);
+    		if(i == 1)
+    			launcher.Position = ground.GetNode<Position2D>("Gun 1").GlobalPosition;
+    		if(i == 2)
+    			launcher.Position = ground.GetNode<Position2D>("Gun 2").GlobalPosition;
+    		if(i == 3)
+    			launcher.Position = ground.GetNode<Position2D>("Gun 3").GlobalPosition;
+    		Vector2 launPos = launcher.Position;
+    		launPos.y -= 7;
+    		launcher.Position = launPos;
     	}
     }
 

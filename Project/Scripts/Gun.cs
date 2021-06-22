@@ -35,9 +35,16 @@ public class Gun : Node2D
 			gun.RotationDegrees += 90;
 		}*/
 
-		gun.LookAt(GetGlobalMousePosition());
-		gun.RotationDegrees += 90;
-		GD.Print(gun.RotationDegrees);
+		//gun.LookAt(GetGlobalMousePosition());
+		//gun.RotationDegrees += 90;
+
+		float checkRotation = CheckMouse(this.GetNode<Sprite>("Gun"), this.GetNode<Sprite>("Gun").Position);
+
+		if( checkRotation > -80 && checkRotation < 80 )
+		{
+			gun.LookAt(GetGlobalMousePosition());
+			gun.RotationDegrees += 90;
+		}
 
 		/*if( CheckMouse(this.GetNode<Sprite>("Gun"), this.GetNode<Sprite>("Gun").Position ) < -90)
 		{

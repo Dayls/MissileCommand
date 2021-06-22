@@ -10,7 +10,7 @@ script = ExtResource( 3 )
 gunScene = ExtResource( 4 )
 
 [node name="background" type="Sprite" parent="."]
-position = Vector2( 495.964, 298.218 )
+position = Vector2( 512, 300 )
 z_index = -1
 texture = ExtResource( 1 )
 
