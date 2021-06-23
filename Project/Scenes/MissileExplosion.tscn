@@ -80,7 +80,7 @@ frame = 17
 script = ExtResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-playback_speed = 4.0
+playback_speed = 2.0
 anims/Explode = SubResource( 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
