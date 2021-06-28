@@ -2,11 +2,11 @@
 
 [ext_resource path="res://Sprites/Ground.png" type="Texture" id=1]
 
-[node name="Ground" type="Node2D"]
+[node name="Ground" type="StaticBody2D" groups=[
+"Ground",
+]]
 
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PoolVector2Array( -0.234756, 579.957, 27.5148, 579.957, 35.9238, 560.196, 88.4798, 560.616, 98.1501, 580.377, 473.19, 579.957, 482.019, 559.775, 534.155, 559.355, 545.507, 581.218, 906.252, 581.218, 915.922, 560.616, 968.898, 560.616, 977.728, 581.218, 1023.98, 580.798, 1024.09, 600.286, -0.0288849, 599.951 )
 
 [node name="Sprite" type="Sprite" parent="."]

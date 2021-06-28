@@ -17,7 +17,8 @@ public class Missile : Node2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        GetNode<Particles2D>("Fire").Emitting = true;
+        if(GetNode<Particles2D>("Fire").Visible == true)
+            GetNode<Particles2D>("Fire").Emitting = true;
     }
 
     public void moveToTarget(Vector2 target)
@@ -37,10 +38,10 @@ public class Missile : Node2D
     	}
 
     	if( new Vector2(GlobalPosition - targetPos ).y < 1.5f)
-    		destroy();
+    		die();
     }
 
-    void destroy()
+    void die()
     {
     	canMove = false;
     	GetNode<Particles2D>("Fire").OneShot = true;
@@ -54,7 +55,8 @@ public class Missile : Node2D
 		if(canExplode)
 		{
 			canExplode = false;
-			startExplosion();
+            var explode = (Explode)GetNode("/root/Explode");
+			explode.startExplosion(GlobalPosition, "player", (int)1.25);
 		}
     }
 
@@ -63,12 +65,7 @@ public class Missile : Node2D
     	CallDeferred("free");
     }
 
-    void startExplosion()
-    {
-    	MissileExplosion explosion = (MissileExplosion)ExplosionScene.Instance();
-    	GetTree().Root.AddChild(explosion);
-    	explosion.GlobalPosition = GlobalPosition;
-    }
+    
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)
