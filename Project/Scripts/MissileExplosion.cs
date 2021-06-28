@@ -11,6 +11,9 @@ public class MissileExplosion : Sprite
     [Signal]
     public delegate void CitieHit();
 
+    [Signal]
+    public delegate void GunHit();
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -41,11 +44,20 @@ public class MissileExplosion : Sprite
         {
             if(body.IsInGroup("Citie"))
             {
-                Connect("CitieHit", body, "pop");
-                EmitSignal("CitieHit");
+                if(!IsConnected("CitieHit", body, "pop"))
+                {
+                    Connect("CitieHit", body, "pop");
+                    EmitSignal("CitieHit");
+                }
             }
             if(body.IsInGroup("Gun"))
-                GD.Print("Add gun");    // TODO
+            {
+                if(!IsConnected("GunHit", body, "die"))
+                {
+                    Connect("GunHit", body, "die");
+                    EmitSignal("GunHit");
+                }
+            }
         }
     }
 

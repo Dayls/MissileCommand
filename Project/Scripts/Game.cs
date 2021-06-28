@@ -10,9 +10,7 @@ public class Game : Node2D
 	public PackedScene enemyScene;
 #pragma warning restore 649
 
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+    int ammoCount = 0;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -73,6 +71,9 @@ public class Game : Node2D
     		Gun gun = (Gun)gunScene.Instance();
     		AddChild(gun);
 
+    		gun.AddToGroup("Gun");
+
+
     		var ground = GetNode<Node2D>("Ground");
     		if(i == 1)
     		{
@@ -109,6 +110,7 @@ public class Game : Node2D
     		Vector2 launPos = launcher.Position;
     		launPos.y -= 7;
     		launcher.Position = launPos;
+    		launcher.Name = $"Launcher {i}";
     	}
     }
 
@@ -125,19 +127,57 @@ public class Game : Node2D
 			Vector2 mousePos = GetGlobalMousePosition();
 			if ( mousePos.x <= 341.3f )
 			{
-				Gun gun = (Gun)GetNode<Node2D>("Gun 1");
-				gun.ShootRocket (GetGlobalMousePosition ());
+				if(GetNode<Node2D>("Gun 1") != null)
+				{
+					Gun gun = (Gun)GetNode<Node2D>("Gun 1");
+					gun.ShootRocket (GetGlobalMousePosition ());
+				}
 			}
 			else if( mousePos.x > 341.3f && mousePos.x <= 682.6f )
 			{
-				Gun gun = (Gun)GetNode<Node2D>("Gun 2");
-				gun.ShootRocket(GetGlobalMousePosition ());
+				if(GetNode<Node2D>("Gun 2") != null)
+				{
+					Gun gun = (Gun)GetNode<Node2D>("Gun 2");
+					gun.ShootRocket(GetGlobalMousePosition ());
+				}
 			}
 			else if( mousePos.x > 682.6f && mousePos.x <= 1024 )
 			{
-				Gun gun = (Gun)GetNode<Node2D>("Gun 3");
-				gun.ShootRocket(GetGlobalMousePosition ());
+				if(GetNode<Node2D>("Gun 3") != null)
+				{
+					Gun gun = (Gun)GetNode<Node2D>("Gun 3");
+					gun.ShootRocket(GetGlobalMousePosition ());
+				}
 			}
 		}
 	}
+
+	public int countGuns()
+	{
+		int gunCount = 0;
+		foreach( Node2D gun in GetTree().GetNodesInGroup("Gun"))
+			gunCount += 1;
+
+		if(gunCount == 0)
+			GD.Print("Game over!");
+
+		return gunCount;
+	}
+
+	public int countCities()
+	{
+		int citieCount = 0;
+		foreach( var citie in GetTree().GetNodesInGroup("Citie"))
+			citieCount += 1;
+
+		if(citieCount == 0)
+			GD.Print("Game over!");
+
+		return citieCount;
+	}
+
+	/*public int countAmmo()
+	{
+		return ammoCount;
+	}*/
 }

@@ -9,6 +9,8 @@ public class Gun : Node2D
     double degree;
     int rotationMax = 80;
 
+    int ammo = 10;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -49,11 +51,60 @@ public class Gun : Node2D
 
 	public void ShootRocket( Vector2 mousePos )
 	{
-		if(canFire)
+		if(canFire && ammo != 0)
 		{
 			Missile missile = (Missile)missileScene.Instance();
 			AddChild(missile);
 			missile.moveToTarget(mousePos);
+
+			changeAmmoCount(1);
+		}
+	}
+
+	void die()
+	{
+		// destroying launcher sprite
+		if(	this.Name== "Gun 1")
+			GetParent().GetNode<Sprite>("Launcher 1").QueueFree();
+		if(this.Name == "Gun 2")
+			GetParent().GetNode<Sprite>("Launcher 2").QueueFree();
+		if(this.Name == "Gun 3")
+			GetParent().GetNode<Sprite>("Launcher 3").QueueFree();
+
+		// spawning explosion
+		var explode = (Explode)GetNode("/root/Explode");
+        explode.startExplosion(GlobalPosition, "enemy", (int)GD.RandRange(1, 2));
+        CallDeferred("free");
+
+        // counting the amount of guns in the scene tree
+        Game mainNode = (Game)GetTree().Root.GetNode<Node2D>("Game");
+		mainNode.countGuns();
+
+		// removing ammo
+		changeAmmoCount(10);
+	}
+
+	public void changeAmmoCount(int number)
+	{
+		ammo -= number;
+		if(ammo < 0)
+			ammo = 0;
+		switch(Name)
+		{
+			case "Gun 1":
+				Ammo ammo1 = (Ammo)GetParent().GetNode<CanvasLayer>("Ammo");
+				ammo1.changeText(ammo);
+				break;
+			case "Gun 2":
+				Ammo ammo2 = (Ammo)GetParent().GetNode<CanvasLayer>("Ammo2");
+				ammo2.changeText(ammo);
+				break;
+			case "Gun 3":
+				Ammo ammo3 = (Ammo)GetParent().GetNode<CanvasLayer>("Ammo3");
+				ammo3.changeText(ammo);
+				break;
+			default:
+			break;
 		}
 	}
 }

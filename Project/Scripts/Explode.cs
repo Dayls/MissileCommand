@@ -13,9 +13,9 @@ public class Explode : Node
     {
         PackedScene ExplosionScene = (PackedScene)ResourceLoader.Load("res://Scenes/MissileExplosion.tscn");
         MissileExplosion explosion = (MissileExplosion)ExplosionScene.Instance();
-        GetTree().Root.AddChild(explosion);
+        GetTree().Root.CallDeferred("add_child", explosion);
         explosion.GlobalPosition = globPos;
-        explosion.setSource(source);    
+        explosion.setSource(source);
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

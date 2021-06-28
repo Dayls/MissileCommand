@@ -30,24 +30,25 @@ public class EnemyMissile : RigidBody2D
         else
         {
             var explode = (Explode)GetNode("/root/Explode");
-            explode.startExplosion(GlobalPosition, source, (int)GD.RandRange(0.1, 0.5));
+            explode.startExplosion(GlobalPosition, "enemy", (int)GD.RandRange(0.1, 0.5));
             QueueFree();
         }
     }
 
     void _on_Area2D_body_entered(PhysicsBody2D body)
     {
+        source = "enemy";
         if(body.IsInGroup("Citie"))
         {
-            Connect("CitieHit", body, "pop");
-            EmitSignal("CitieHit");
-            source = "enemy";
             die();
             // add score system ( TODO )
         }
         if(body.IsInGroup("Ground"))
         {
-            source = "enemy";
+            die();
+        }
+        if(body.IsInGroup("Gun"))
+        {
             die();
         }
     }
