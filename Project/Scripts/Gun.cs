@@ -5,6 +5,7 @@ public class Gun : Node2D
 {
 	bool canFire = false;
 	public PackedScene missileScene = (PackedScene)ResourceLoader.Load("res://Scenes/Missile.tscn");
+	Game mainNode;
 
     double degree;
     int rotationMax = 80;
@@ -14,7 +15,7 @@ public class Gun : Node2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        
+        mainNode = (Game)GetTree().Root.GetNode<Node2D>("Game");
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -58,6 +59,14 @@ public class Gun : Node2D
 			missile.moveToTarget(mousePos);
 
 			changeAmmoCount(1);
+			if(mainNode.countAmmo() <= 0)
+			{
+				mainNode.GameOver();
+			}
+		}
+		else
+		{
+			mainNode.nullGun(this.Name);
 		}
 	}
 
@@ -77,11 +86,12 @@ public class Gun : Node2D
         CallDeferred("free");
 
         // counting the amount of guns in the scene tree
-        Game mainNode = (Game)GetTree().Root.GetNode<Node2D>("Game");
 		mainNode.countGuns();
 
 		// removing ammo
 		changeAmmoCount(10);
+		mainNode.nullGun(this.Name);
+
 	}
 
 	public void changeAmmoCount(int number)
@@ -106,5 +116,10 @@ public class Gun : Node2D
 			default:
 			break;
 		}
+	}
+
+	public int getAmmoCount()
+	{
+		return ammo;
 	}
 }

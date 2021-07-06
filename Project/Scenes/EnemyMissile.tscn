@@ -17,11 +17,12 @@ height = 12.6149
 [node name="EnemyMissile" type="RigidBody2D" groups=[
 "Enemy",
 ]]
+collision_mask = 2
 mass = 6687.24
 gravity_scale = 0.0
 script = ExtResource( 3 )
-minSpeed = 150
-maxSpeed = 300
+minSpeed = 50
+maxSpeed = 150
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( -0.0649786, 9.25943 )
@@ -30,12 +31,12 @@ texture = ExtResource( 1 )
 offset = Vector2( 1.29958, -185.189 )
 
 [node name="Trail" type="Line2D" parent="."]
-width = 6.0
+width = 4.0
 width_curve = SubResource( 1 )
 gradient = SubResource( 2 )
 end_cap_mode = 2
 script = ExtResource( 2 )
-length = 25
+length = 150
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 0, 9.22677 )

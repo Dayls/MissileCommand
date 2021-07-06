@@ -107,6 +107,7 @@ length = 25
 position = Vector2( -0.0701542, 18.4505 )
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
 shape = SubResource( 9 )

@@ -14,10 +14,13 @@ public class MissileExplosion : Sprite
     [Signal]
     public delegate void GunHit();
 
+    Game mainNode;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         GetNode<AnimationPlayer>("AnimationPlayer").Play("Explode");
+        mainNode = (Game)GetTree().Root.GetNode<Node2D>("Game");
     }
 
     void die()
@@ -36,6 +39,7 @@ public class MissileExplosion : Sprite
         {
             if(body.IsInGroup("Enemy"))
             {
+                mainNode.ChangeScore(25);
                 Connect("EnemyHit", body, "die");
                 EmitSignal("EnemyHit");
             }

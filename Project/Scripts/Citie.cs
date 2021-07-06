@@ -18,8 +18,8 @@ public class Citie : Node2D
 
     void _on_AnimatedSprite_animation_finished()
     {
-        CallDeferred("free");
         mainNode.countCities();
+        CallDeferred("free");
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
