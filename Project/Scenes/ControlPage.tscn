@@ -146,9 +146,10 @@ margin_top = 393.717
 margin_right = 886.821
 margin_bottom = 461.717
 custom_fonts/font = SubResource( 5 )
-text = "Restart game"
+text = "Exit game"
 __meta__ = {
-"_editor_description_": ""
+"_edit_use_anchors_": false,
+"_editor_description_": "Todo"
 }
 
 [node name="Tween" type="Tween" parent="."]

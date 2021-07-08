@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Gun.png-abb746fcdca48e2e2a3fa88bc00a5679.stex"
+path="res://.import/ArrowCoursoreScaledOut.png-ee80e2e2737ca08f1ade05cec3a1bdf3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Launcher/Gun.png"
-dest_files=[ "res://.import/Gun.png-abb746fcdca48e2e2a3fa88bc00a5679.stex" ]
+source_file="res://Sprites/ArrowCoursoreScaledOut.png"
+dest_files=[ "res://.import/ArrowCoursoreScaledOut.png-ee80e2e2737ca08f1ade05cec3a1bdf3.stex" ]
 
 [params]
 

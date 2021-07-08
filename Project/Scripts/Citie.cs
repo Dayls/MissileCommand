@@ -12,7 +12,6 @@ public class Citie : Node2D
 
     void pop()
     {
-        // add score system ( TODO )
         GetNode<AnimatedSprite>("AnimatedSprite").Playing = true;
     }
 

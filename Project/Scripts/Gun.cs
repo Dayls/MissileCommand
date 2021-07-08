@@ -5,17 +5,23 @@ public class Gun : Node2D
 {
 	bool canFire = false;
 	public PackedScene missileScene = (PackedScene)ResourceLoader.Load("res://Scenes/Missile.tscn");
+	PackedScene soundEffect = (PackedScene)ResourceLoader.Load("res://Scenes/Launching.tscn");
 	Game mainNode;
 
     double degree;
     int rotationMax = 80;
 
     int ammo = 10;
+    int ammoMax = 10;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        mainNode = (Game)GetTree().Root.GetNode<Node2D>("Game");
+    	foreach(Game game in GetTree().GetNodesInGroup("Game"))
+    	{
+        	mainNode = (Game)game;
+    	}
+
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -54,8 +60,15 @@ public class Gun : Node2D
 	{
 		if(canFire && ammo != 0)
 		{
+			// sound effect
+			AudioStreamPlayer rocketLaunch = (AudioStreamPlayer)soundEffect.Instance();
+			AddChild(rocketLaunch);
+			rocketLaunch.Play();
+
+			// launching missile
 			Missile missile = (Missile)missileScene.Instance();
 			AddChild(missile);
+			missile.AddToGroup("Missile");
 			missile.moveToTarget(mousePos);
 
 			changeAmmoCount(1);
@@ -70,20 +83,27 @@ public class Gun : Node2D
 		}
 	}
 
-	void die()
+	public void die()
 	{
 		// destroying launcher sprite
 		if(	this.Name== "Gun 1")
+		{
 			GetParent().GetNode<Sprite>("Launcher 1").QueueFree();
+		}
 		if(this.Name == "Gun 2")
+		{
 			GetParent().GetNode<Sprite>("Launcher 2").QueueFree();
+		}
 		if(this.Name == "Gun 3")
+		{
 			GetParent().GetNode<Sprite>("Launcher 3").QueueFree();
+		}
 
 		// spawning explosion
 		var explode = (Explode)GetNode("/root/Explode");
-        explode.startExplosion(GlobalPosition, "enemy", (int)GD.RandRange(1, 2));
+        explode.startExplosion(GlobalPosition, "player", (int)GD.RandRange(1, 2));
         CallDeferred("free");
+        _ExitTree();
 
         // counting the amount of guns in the scene tree
 		mainNode.countGuns();
@@ -99,6 +119,9 @@ public class Gun : Node2D
 		ammo -= number;
 		if(ammo < 0)
 			ammo = 0;
+		if(ammo > 10)
+			ammo = 10;
+
 		switch(Name)
 		{
 			case "Gun 1":
@@ -116,6 +139,11 @@ public class Gun : Node2D
 			default:
 			break;
 		}
+	}
+
+	public void ResetAmmoCount()
+	{
+		changeAmmoCount(-10);
 	}
 
 	public int getAmmoCount()

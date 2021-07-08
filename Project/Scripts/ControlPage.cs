@@ -6,6 +6,7 @@ public class ControlPage : Control
     MoveCloud tween;
     TextureRect controlWindow;
     Global global;
+    Label controlText;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -13,6 +14,13 @@ public class ControlPage : Control
         tween = (MoveCloud)GetNode<Tween>("Tween");
         controlWindow = (TextureRect)GetNode<TextureRect>("ControlWindow");
         global = (Global)GetNode("/root/Global");
+        controlText = (Label)controlWindow.GetNode<Label>("controlText");
+    }
+
+    public void ReloadScene()
+    {
+        _ExitTree();
+        QueueFree();
     }
 
     public void changeCurrentScoreText(int score)
@@ -37,7 +45,7 @@ public class ControlPage : Control
 
     public void Pause()
     {
-        controlWindow.GetNode<Label>("controlText").Text = "\nGame paused";
+        controlText.Text = "\nGame paused";
         tween.animateIn();
     }
 

@@ -36,7 +36,7 @@ width_curve = SubResource( 1 )
 gradient = SubResource( 2 )
 end_cap_mode = 2
 script = ExtResource( 2 )
-length = 150
+length = 200
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 0, 9.22677 )

@@ -3,10 +3,12 @@ using System;
 
 public class Missile : Node2D
 {
-    Vector2 targetPos;
+    Vector2 targetPos = new Vector2(0, 0);
     [Export]
     int speed = 500;
     bool canMove = true;
+
+    Node XHolder;
 
 #pragma warning disable 649
     [Export]
@@ -19,6 +21,8 @@ public class Missile : Node2D
     {
         if(GetNode<Particles2D>("Fire").Visible == true)
             GetNode<Particles2D>("Fire").Emitting = true;
+
+        XHolder = GetNode<Node>("XHolder");
     }
 
     public void moveToTarget(Vector2 target)
@@ -28,6 +32,12 @@ public class Missile : Node2D
 
     public override void _PhysicsProcess(float delta)
     {
+        if(targetPos != new Vector2(0,0))
+        {
+            //XHolder.RotationDegrees = 0;
+            XHolder.GetNode<Sprite>("X").Position = targetPos;
+            XHolder.GetNode<Sprite>("X").Show();
+        }
     	if(canMove)
     	{
     		LookAt(targetPos);
@@ -43,6 +53,8 @@ public class Missile : Node2D
 
     void die()
     {
+        XHolder.GetNode<Sprite>("X").Hide();
+
     	canMove = false;
     	GetNode<Particles2D>("Fire").OneShot = true;
     	Timer timer = new Timer();

@@ -21,6 +21,11 @@ public class MissileExplosion : Sprite
     {
         GetNode<AnimationPlayer>("AnimationPlayer").Play("Explode");
         mainNode = (Game)GetTree().Root.GetNode<Node2D>("Game");
+
+        PackedScene sound = (PackedScene)ResourceLoader.Load("res://Scenes/Explosion sound.tscn");
+        AudioStreamPlayer explosionSound = (AudioStreamPlayer)sound.Instance();
+        AddChild(explosionSound);
+        explosionSound.Play();
     }
 
     void die()

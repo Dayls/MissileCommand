@@ -69,24 +69,24 @@ tracks/4/keys = {
 }
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 79.9626
+radius = 77.5713
 
 [node name="MissileExplosion" type="Sprite"]
 scale = Vector2( 0.35, 0.35 )
 texture = ExtResource( 1 )
 hframes = 8
 vframes = 6
-frame = 17
+frame = 12
 script = ExtResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-playback_speed = 2.0
+playback_speed = 1.6
 anims/Explode = SubResource( 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( 11.6566, -4.25855 )
+position = Vector2( 11.9996, -8.65259 )
 shape = SubResource( 2 )
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

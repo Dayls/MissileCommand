@@ -17,6 +17,9 @@ public class Game : Node2D
 	bool showed;
 	int iterationCount = 0;
 
+	float minEnemySpawn = 0.25f;
+	float maxEnemySpawn = 1.5f;
+
 	// score
 	int currentScore;
 	int scoreRecord;
@@ -25,14 +28,19 @@ public class Game : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+
 		GetNode<Label>("startText").Show();
 		showed = true;
 		LoadRecordScore();
+		
+//		global.changeRecordText(LoadRecordScore());
 	}
 
 	void OnStartTimerTimeout()
 	{
-		GetNode<Timer>("EnemyTimer").WaitTime = RandomNumberGen();
+		var rng = new RandomNumberGenerator();
+		rng.Randomize();
+		GetNode<Timer>("EnemyTimer").WaitTime = rng.RandfRange(minEnemySpawn, maxEnemySpawn);
 		GetNode<Timer>("EnemyTimer").Start();
 	}
 
@@ -43,6 +51,7 @@ public class Game : Node2D
 
 		var enemyMissile = (EnemyMissile)enemyScene.Instance();
 		AddChild(enemyMissile);
+		enemyMissile.AddToGroup("Missile");
 
 		float direction = missileSpawnLocation.Rotation + Mathf.Deg2Rad(90);
 
@@ -67,7 +76,7 @@ public class Game : Node2D
 	{
 		var randomNumber = new RandomNumberGenerator();
 		randomNumber.Randomize();
-		float delay = randomNumber.RandfRange(0.25f, 1.5f);
+		float delay = randomNumber.RandfRange(minEnemySpawn, maxEnemySpawn);
 
 		return delay;
 	}
@@ -127,6 +136,11 @@ public class Game : Node2D
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
+		var rng = new RandomNumberGenerator();
+		rng.Randomize();
+		GetNode<Timer>("EnemyTimer").WaitTime = rng.RandfRange(minEnemySpawn, maxEnemySpawn);
+		GD.Print(GetNode<Timer>("EnemyTimer").WaitTime);
+
 		if(!showed && iterationCount == 0)
 		{
 			iterationCount += 1;
@@ -149,33 +163,33 @@ public class Game : Node2D
 			Vector2 mousePos = GetGlobalMousePosition();
 			if ( mousePos.x <= 341.3f )
 			{
-				if(gunCell[1] != null)
+				if(IsInstanceValid(gunCell[1]))
 					gunCell[1].ShootRocket (GetGlobalMousePosition ());
-				else if(gunCell[2] != null)
+				else if(IsInstanceValid(gunCell[2]))
 					gunCell[2].ShootRocket (GetGlobalMousePosition ());
-				else if(gunCell[3] != null)
+				else if(IsInstanceValid(gunCell[3]))
 					gunCell[3].ShootRocket (GetGlobalMousePosition());
 				else
 					GameOver();
 			}
 			else if( mousePos.x > 341.3f && mousePos.x <= 682.6f )
 			{
-				if(gunCell[2] != null)
+				if(IsInstanceValid(gunCell[2]))
 					gunCell[2].ShootRocket (GetGlobalMousePosition ());
-				else if(gunCell[3] != null)
+				else if(IsInstanceValid(gunCell[3]))
 					gunCell[3].ShootRocket (GetGlobalMousePosition ());
-				else if(gunCell[1] != null)
+				else if(IsInstanceValid(gunCell[1]))
 					gunCell[1].ShootRocket (GetGlobalMousePosition());
 				else
 					GameOver();
 			}
 			else if( mousePos.x > 682.6f && mousePos.x <= 1024 )
 			{
-				if(gunCell[3] != null)
+				if(IsInstanceValid(gunCell[3]))
 					gunCell[3].ShootRocket (GetGlobalMousePosition ());
-				else if(gunCell[2] != null)
+				else if(IsInstanceValid(gunCell[2]))
 					gunCell[2].ShootRocket (GetGlobalMousePosition ());
-				else if(gunCell[1] != null)
+				else if(IsInstanceValid(gunCell[1]))
 					gunCell[1].ShootRocket (GetGlobalMousePosition());
 				else
 					GameOver();
@@ -191,6 +205,8 @@ public class Game : Node2D
 		{
 			GetNode<Label>("startText").Hide();
 			showed = false;
+
+			GetNode<Timer>("LevelTimer").Start();
 		}
 	}
 
@@ -208,6 +224,8 @@ public class Game : Node2D
 				gunCell[i] = null;
 		}
 	}
+
+	// counting
 
 	public int countGuns()
 	{
@@ -229,9 +247,7 @@ public class Game : Node2D
 		foreach( var citie in GetTree().GetNodesInGroup("Citie"))
 			citieCount += 1;
 
-		citieCount -= 1;
-
-		if(citieCount == 0)
+		if(citieCount == 1)
 			GameOver();
 
 		return citieCount;
@@ -239,6 +255,7 @@ public class Game : Node2D
 
 	public int countAmmo()
 	{
+		ammoCount = 0;
 		foreach (Gun gun in GetTree().GetNodesInGroup("Gun"))
 		{
 			ammoCount += gun.getAmmoCount();
@@ -250,7 +267,49 @@ public class Game : Node2D
 
 	public void ChangeLevel()
 	{
-		// Todo
+		Global global = (Global)GetNode("/root/Global");
+		global.ChangeLevel(countAmmo(), countCities());
+		ChangeScore(countAmmo() * 5 + countCities() * 100);
+	}
+
+	public void startGameTimer()
+	{
+		minEnemySpawn -= 0.25f;
+		maxEnemySpawn -= 0.5f;
+
+		if(minEnemySpawn <= 0)
+			minEnemySpawn = 0.01f;
+		if(maxEnemySpawn <= 0)
+			maxEnemySpawn = 0.01f;
+
+		GetNode<Timer>("LevelTimer").Start();
+	}
+
+	public void FreeRockets()
+	{
+		foreach(Node missile in GetTree().GetNodesInGroup("Missile"))
+		{
+			missile.QueueFree();
+		}
+		startGameTimer();
+	}
+
+	public void ResetAmmo()
+	{
+		/*
+		foreach(Gun gun in GetTree().GetNodesInGroup("Gun"))
+		{
+			gun.die();
+			gun.RemoveFromGroup("Gun");
+		}
+
+		iterationCount = 0;
+		showed = false;
+		*/
+		foreach(Gun gun in GetTree().GetNodesInGroup("Gun"))
+		{
+			gun.ResetAmmoCount();
+		}
 	}
 
 	// score system
@@ -259,15 +318,18 @@ public class Game : Node2D
 	{
 		Global global = (Global)GetNode("/root/Global");
 		currentScore += score;
-		if(LoadRecordScore() > currentScore)
+		if(currentScore > LoadRecordScore())
 		{
 			scoreRecord = currentScore;
 			SaveRecordScore();
 			global.changeRecordText(scoreRecord);
 		}
 		global.changeCurrentText(currentScore);
+		global.changeRecordText(LoadRecordScore());
+
 		var ScoreNode = GetNode<Node2D>("CurrentScore");
 		ScoreNode.GetNode<Label>("CurrentScore").Text = $"{currentScore}";
+
 		return currentScore;
 	}
 
@@ -292,5 +354,10 @@ public class Game : Node2D
 			scoreRecord = 0;
 
 		return scoreRecord;
+	}
+
+	public void ReloadScene()
+	{
+		GD.Print("reload scene - TODO");
 	}
 }

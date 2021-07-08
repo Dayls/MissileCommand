@@ -7,12 +7,12 @@
 [ext_resource path="res://Sprites/Bomp.png" type="Texture" id=5]
 [ext_resource path="res://Sprites/bubble_pop_animation.svg" type="Texture" id=6]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 50
 use_filter = true
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 size = 50
 use_filter = true
 font_data = ExtResource( 3 )
@@ -38,7 +38,7 @@ margin_left = 210.127
 margin_top = 96.5274
 margin_right = 781.127
 margin_bottom = 165.527
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "Bonus points"
 align = 1
 __meta__ = {
@@ -50,7 +50,7 @@ margin_left = 206.127
 margin_top = 350.527
 margin_right = 777.127
 margin_bottom = 419.527
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "Total points"
 align = 1
 __meta__ = {
@@ -62,7 +62,7 @@ margin_left = 136.0
 margin_top = 182.047
 margin_right = 289.0
 margin_bottom = 259.047
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 1
 valign = 1
@@ -75,7 +75,7 @@ margin_left = 136.0
 margin_top = 290.259
 margin_right = 289.0
 margin_bottom = 367.259
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 1
 valign = 1
@@ -88,7 +88,7 @@ margin_left = 414.0
 margin_top = 408.259
 margin_right = 567.0
 margin_bottom = 485.259
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 1
 valign = 1
@@ -112,12 +112,10 @@ vframes = 5
 script = ExtResource( 4 )
 
 [node name="pointPerRocket" type="Timer" parent="."]
-wait_time = 0.5
-autostart = true
+wait_time = 0.1
 
 [node name="pointPerCitie" type="Timer" parent="."]
-wait_time = 0.5
-autostart = true
+wait_time = 0.7
 
 [connection signal="timeout" from="pointPerRocket" to="." method="_on_pointPerRocket_timeout"]
 [connection signal="timeout" from="pointPerCitie" to="." method="_on_pointPerCitie_timeout"]
