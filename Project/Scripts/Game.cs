@@ -139,7 +139,6 @@ public class Game : Node2D
 		var rng = new RandomNumberGenerator();
 		rng.Randomize();
 		GetNode<Timer>("EnemyTimer").WaitTime = rng.RandfRange(minEnemySpawn, maxEnemySpawn);
-		GD.Print(GetNode<Timer>("EnemyTimer").WaitTime);
 
 		if(!showed && iterationCount == 0)
 		{

@@ -143,7 +143,7 @@ pause_mode = 2
 ] instance=ExtResource( 10 )]
 
 [node name="LevelTimer" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 30.0
 
 [node name="ZIndexEndNode" type="Node2D" parent="."]
 z_index = 10
