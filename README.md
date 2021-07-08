@@ -1,2 +1,3 @@
 # MissileCommand
-Remake of 80s game - Missile Command
+My recreation of 80s Missile Command game
+You can download executable of it for Windows or Linux from this repository
